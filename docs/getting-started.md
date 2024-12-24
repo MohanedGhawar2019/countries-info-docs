@@ -1,19 +1,12 @@
-# Getting Started
+# Getting Started with Countries Info
 
-This guide will help you get started with the Countries Info library in your preferred programming language.
+Countries Info is a comprehensive library for accessing detailed country information, including regions, cities, capitals, continents, and more. Available for JavaScript/Node.js, PHP, and C#.
 
 ## Installation
-
-Choose your platform and follow the installation instructions:
 
 ### JavaScript/Node.js
 ```bash
 npm install @mohaned.ghawar/countries-info
-```
-
-### Python
-```bash
-pip install countries-info-mg
 ```
 
 ### PHP
@@ -21,55 +14,96 @@ pip install countries-info-mg
 composer require mohanedghawar/countries-info
 ```
 
-### .NET
+### C#
 ```bash
 dotnet add package CountriesInfo
 ```
 
-## Basic Usage
-
-All implementations provide similar basic functionality:
-
-- Get all countries
-- Get country by name
-- Get country by code
-- Get countries by continent (C# only)
-
-## Data Structure
-
-All packages return country data in a consistent format:
-
-```json
-{
-  "name": "String",       // Country name
-  "code": "String",       // ISO 2-letter code
-  "capital": "String",    // Capital city
-  "continent": "String",  // Continent name
-  "population": Number,   // Population count
-  "area": Number         // Area in square kilometers
-}
-```
-
-## Requirements
+## Quick Start
 
 ### JavaScript/Node.js
-- Node.js 12.x or higher
-- npm or yarn package manager
+```javascript
+const CountriesService = require('@mohaned.ghawar/countries-info');
 
-### Python
-- Python 3.6 or higher
-- pip package manager
+const service = new CountriesService();
+
+// Get all countries
+const countries = service.getAllCountries();
+
+// Get cities in California, USA
+const californiaCities = service.getCitiesByRegion('USA', 'California');
+
+// Search for cities named "Paris"
+const parisCities = service.searchCities('Paris');
+```
 
 ### PHP
-- PHP 7.4 or higher
-- Composer package manager
+```php
+use MohanedGhawar\CountriesInfo\CountriesInfo;
 
-### .NET
-- .NET 6.0 or higher
-- NuGet package manager
+$service = new CountriesInfo();
+
+// Get all countries
+$countries = $service->getAllCountries();
+
+// Get cities in California, USA
+$californiaCities = $service->getCitiesByRegion('USA', 'California');
+
+// Search for cities named "Paris"
+$parisCities = $service->searchCities('Paris');
+```
+
+### C#
+```csharp
+using CountriesInfo;
+
+var service = new CountriesService();
+
+// Get all countries
+var countries = service.GetAllCountries();
+
+// Get cities in California, USA
+var californiaCities = service.GetCitiesByRegion("USA", "California");
+
+// Search for cities named "Paris"
+var parisCities = service.SearchCities("Paris");
+```
+
+## Features
+
+- **Countries Data**
+  - Names (common and official)
+  - ISO codes (2 and 3 letter)
+  - Capitals
+  - Continents
+  - Population
+  - Area
+
+- **Regions Data**
+  - States/Provinces for each country
+  - Administrative divisions
+  - Regional codes
+
+- **Cities Data** (New in v1.1.0)
+  - 150,000+ cities worldwide
+  - City names and populations
+  - Geographical coordinates (latitude/longitude)
+  - Hierarchical organization (Country → Region → Cities)
+
+- **Search Capabilities**
+  - Search countries by name
+  - Search cities across all countries
+  - Filter by continent
+  - Get cities by region
+
+## Data Coverage
+
+- 250+ Countries
+- 4,000+ Regions/States
+- 150,000+ Cities worldwide
 
 ## Next Steps
 
-- Check out the [API Reference](api-reference.md) for detailed documentation
+- Check out the [API Reference](api-reference.md) for detailed method documentation
 - See [Examples](examples.md) for common use cases
-- Review [Best Practices](best-practices.md) for optimization tips
+- Read [Best Practices](best-practices.md) for optimization tips

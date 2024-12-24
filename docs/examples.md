@@ -118,6 +118,199 @@ Sort countries by various criteria.
    - Caching strategies
    - Memory optimization
 
+## Code Examples
+
+### Basic Country Information
+
+#### JavaScript/Node.js
+```javascript
+const CountriesService = require('@mohaned.ghawar/countries-info');
+
+const service = new CountriesService();
+
+// Get basic country info
+const usa = service.getCountryByCode('USA');
+console.log(`Country: ${usa.name.common}`);
+console.log(`Capital: ${usa.capital}`);
+console.log(`Population: ${usa.population.toLocaleString()}`);
+
+// Get European countries
+const europeanCountries = service.getCountriesByContinent('Europe');
+console.log(`Number of European countries: ${europeanCountries.length}`);
+```
+
+#### PHP
+```php
+use MohanedGhawar\CountriesInfo\CountriesInfo;
+
+$service = new CountriesInfo();
+
+// Get basic country info
+$usa = $service->getCountryByCode('USA');
+echo "Country: {$usa['name']['common']}\n";
+echo "Capital: {$usa['capital']}\n";
+echo "Population: " . number_format($usa['population']) . "\n";
+
+// Get European countries
+$europeanCountries = $service->getCountriesByContinent('Europe');
+echo "Number of European countries: " . count($europeanCountries) . "\n";
+```
+
+#### C#
+```csharp
+using CountriesInfo;
+
+var service = new CountriesService();
+
+// Get basic country info
+var usa = service.GetCountryByCode("USA");
+Console.WriteLine($"Country: {usa.Name.Common}");
+Console.WriteLine($"Capital: {usa.Capital}");
+Console.WriteLine($"Population: {usa.Population:N0}");
+
+// Get European countries
+var europeanCountries = service.GetCountriesByContinent("Europe");
+Console.WriteLine($"Number of European countries: {europeanCountries.Count()}");
+```
+
+## Working with Cities (New in v1.1.0)
+
+### Find Cities by Region
+```javascript
+// JavaScript
+const californiaCities = service.getCitiesByRegion('USA', 'California');
+console.log(`Cities in California: ${californiaCities.length}`);
+californiaCities.slice(0, 5).forEach(city => {
+    console.log(`${city.name}: Population ${city.population.toLocaleString()}`);
+});
+```
+
+```php
+// PHP
+$californiaCities = $service->getCitiesByRegion('USA', 'California');
+echo "Cities in California: " . count($californiaCities) . "\n";
+array_slice($californiaCities, 0, 5).forEach(function($city) {
+    echo "{$city['name']}: Population " . number_format($city['population']) . "\n";
+});
+```
+
+```csharp
+// C#
+var californiaCities = service.GetCitiesByRegion("USA", "California");
+Console.WriteLine($"Cities in California: {californiaCities.Count()}");
+foreach (var city in californiaCities.Take(5))
+{
+    Console.WriteLine($"{city.Name}: Population {city.Population:N0}");
+}
+```
+
+### Search Cities Globally
+```javascript
+// JavaScript
+const parisCities = service.searchCities('Paris');
+parisCities.forEach(city => {
+    console.log(`${city.name} (${city.countryCode}): ${city.regionName}`);
+});
+```
+
+```php
+// PHP
+$parisCities = $service->searchCities('Paris');
+foreach ($parisCities as $city) {
+    echo "{$city['name']} ({$city['countryCode']}): {$city['regionName']}\n";
+}
+```
+
+```csharp
+// C#
+var parisCities = service.SearchCities("Paris");
+foreach (var city in parisCities)
+{
+    Console.WriteLine($"{city.Name} ({city.CountryCode}): {city.RegionName}");
+}
+```
+
+### City Statistics
+```javascript
+// JavaScript
+const countries = ['USA', 'FRA', 'GBR'];
+countries.forEach(code => {
+    const count = service.getCityCount(code);
+    console.log(`Cities in ${code}: ${count.toLocaleString()}`);
+});
+```
+
+```php
+// PHP
+$countries = ['USA', 'FRA', 'GBR'];
+foreach ($countries as $code) {
+    $count = $service->getCityCount($code);
+    echo "Cities in {$code}: " . number_format($count) . "\n";
+}
+```
+
+```csharp
+// C#
+var countries = new[] { "USA", "FRA", "GBR" };
+foreach (var code in countries)
+{
+    var count = service.GetCityCount(code);
+    Console.WriteLine($"Cities in {code}: {count:N0}");
+}
+```
+
+## Advanced Examples
+
+### Find Most Populous Cities
+```javascript
+// JavaScript
+const allUsCities = service.getAllCitiesInCountry('USA');
+const topCities = allUsCities
+    .sort((a, b) => b.population - a.population)
+    .slice(0, 10);
+
+console.log('Top 10 US Cities by Population:');
+topCities.forEach((city, index) => {
+    console.log(`${index + 1}. ${city.name}: ${city.population.toLocaleString()}`);
+});
+```
+
+### Cities Near Coordinates
+```javascript
+// JavaScript
+function findCitiesNearCoordinates(lat, lon, maxDistance) {
+    const allCities = service.getAllCitiesInCountry('USA');
+    return allCities.filter(city => {
+        const distance = calculateDistance(
+            lat, lon,
+            parseFloat(city.latitude),
+            parseFloat(city.longitude)
+        );
+        return distance <= maxDistance;
+    });
+}
+
+// Helper function to calculate distance between coordinates (in km)
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Earth's radius in km
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+}
+
+function toRad(deg) {
+    return deg * (Math.PI/180);
+}
+
+// Find cities within 50km of San Francisco
+const nearbySF = findCitiesNearCoordinates(37.7749, -122.4194, 50);
+console.log(`Cities within 50km of San Francisco: ${nearbySF.length}`);
+```
+
 ## Additional Resources
 
 - [API Reference](api-reference.md)
